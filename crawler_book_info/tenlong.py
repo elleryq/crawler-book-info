@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from jinja2 import Template
+import importlib_resources as _resources
+from jinja2 import Template, FileSystemLoader, Environment
 import logging
 import requests
 import sys
@@ -71,59 +72,18 @@ def parser_book_outline(data):
 def to_html(data):
     try:
         # Template with Jinja2
-        template = Template(
-            """\
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width" />
-  <title> {{ title }} </title>
-</head>
-<body>
-  <p>
-    Buy:
-    <ul>
-      <li> <a href="{{ url }}" target="_blank">天瓏書局</a> </li>
-    </ul>
-  </p>
-  <hr>
-  {{ info }}
+        with _resources.path("crawler_book_info", "templates") as _path:
+            template_path = str(_path)
+            loader = FileSystemLoader(searchpath=template_path)
+            env = Environment(loader=loader)
+            template = env.get_template("tenlong.tmpl")
 
-  <h2>商品描述</h2>
-  {{ desc }}
+            # Mapping the parser data to template.
+            result = template.render(**data)
 
-  <h2>作者簡介</h2>
-  {{ author }}
-
-  <h2>目錄大綱</h2>
-  {{ outline }}
-
-  <h2>Memo</h2>
-
-  <h3>我想讀這本書的原因是什麼?</h3>
-
-  <h3>看完書封介紹和目錄大綱後，我覺得我可以從那邊得到什麼?</h3>
-
-  <h3>在買這本新書前，我曾讀過相關的主題的書籍嗎? 當時得到了什麼新知?</h3>
-
-  <footer style="text-align: center;">
-    Parser by
-      <a href="https://github.com/chusiang/crawler-book-info" target="_blank">
-        chusiang/crawler-book-info
-      </a>
-    <hr>
-  </footer>
-</body>
-</html>
-"""
-        )
-        # Mapping the parser data to template.
-        result = template.render(**data)
-
-        # Write to HTML file.
-        with open("index.html", "w") as f:
-            f.write(pangu.spacing_text(result))
+            # Write to HTML file.
+            with open("index.html", "w") as f:
+                f.write(pangu.spacing_text(result))
     except Exception as e:
         print(e)
 
