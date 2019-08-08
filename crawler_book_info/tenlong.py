@@ -26,28 +26,28 @@ def get_data(book_url):
 
 def parser_book_title(data):
     title = data.title
-    title = str(title).replace('<title>天瓏網路書店-', '')
-    title = title.replace('</title>', '')
+    title = str(title).replace("<title>天瓏網路書店-", "")
+    title = title.replace("</title>", "")
     return title
 
 
 def parser_book_info(data):
-    parser_item_info = data.find_all('div', class_='item-info')
+    parser_item_info = data.find_all("div", class_="item-info")
     info = str(parser_item_info[0])
-    info = info.replace('<i class="fa fa-eye fa-before"></i>', '')
-    info = info.replace('<a class="item-preview btn btn-plain" href="#">', '')
-    info = info.replace('預覽內頁</a>', '')
+    info = info.replace('<i class="fa fa-eye fa-before"></i>', "")
+    info = info.replace('<a class="item-preview btn btn-plain" href="#">', "")
+    info = info.replace("預覽內頁</a>", "")
     return info
 
 
 def parser_book_desc(data):
-    parser_item_desc = data.find_all('div', class_='item-desc')
+    parser_item_desc = data.find_all("div", class_="item-desc")
     book_desc = str(parser_item_desc[0])
     return book_desc
 
 
 def parser_book_author(data):
-    parser_item_desc = data.find_all('div', class_='item-desc')
+    parser_item_desc = data.find_all("div", class_="item-desc")
     try:
         author = parser_item_desc[1]
     except IndexError:
@@ -58,7 +58,7 @@ def parser_book_author(data):
 
 
 def parser_book_outline(data):
-    parser_item_desc = data.find_all('div', class_='item-desc')
+    parser_item_desc = data.find_all("div", class_="item-desc")
     try:
         outline = parser_item_desc[2]
     except IndexError:
@@ -71,7 +71,8 @@ def parser_book_outline(data):
 def to_html(data):
     try:
         # Template with Jinja2
-        template = Template('''\
+        template = Template(
+            """\
 <!DOCTYPE html>
 <html>
 <head>
@@ -115,13 +116,14 @@ def to_html(data):
   </footer>
 </body>
 </html>
-''')
+"""
+        )
         # Mapping the parser data to template.
         result = template.render(**data)
 
         # Write to HTML file.
-        with open('index.html', 'w') as f:
-          f.write(pangu.spacing_text(result))
+        with open("index.html", "w") as f:
+            f.write(pangu.spacing_text(result))
     except Exception as e:
         print(e)
 
@@ -141,12 +143,12 @@ def crawl_tenlong(book_url):
 
         # Mapping the parser data to template.
         result = {
-            'title': book_title,
-            'url': book_url,
-            'info': book_info,
-            'desc': book_desc,
-            'author': book_author,
-            'outline': book_outline
+            "title": book_title,
+            "url": book_url,
+            "info": book_info,
+            "desc": book_desc,
+            "author": book_author,
+            "outline": book_outline,
         }
 
         return result
@@ -159,7 +161,7 @@ if __name__ == "__main__":
 
     if arg.isdigit():
         # send get request and get reposoe.
-        book_url = str('https://www.tenlong.com.tw/products/' + arg)
+        book_url = str("https://www.tenlong.com.tw/products/" + arg)
     else:
         book_url = str(arg)
 
