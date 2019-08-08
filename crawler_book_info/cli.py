@@ -31,6 +31,7 @@ def main():
         if netloc in o.netloc:
             data = crawl(url)
             to_html(data, args.output)
+            print("'{}' was crawled to '{}'".format(url, args.output.name))
             break
 
 
