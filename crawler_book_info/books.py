@@ -209,35 +209,38 @@ def to_html(data):
 
 
 def crawl_books_com_tw(book_url):
-  # Get data.
-  data = get_data(book_url)
+  try:
+    # Get data.
+    data = get_data(book_url)
 
-  # Parser.
-  book_title = parser_book_title(data[0])
-  book_url = data[1]
-  book_full_title = parser_book_full_title(data[0])
-  book_cover = parser_book_cover(data[0])
-  book_info1 = parser_book_info1(data[0])
-  book_price = parser_book_price(data[0])
-  book_info2 = parser_book_info2(data[0])
-  book_desc = parser_book_desc(data[0])
-  book_author = parser_book_author(data[0])
-  book_outline = parser_book_outline(data[0])
+    # Parser.
+    book_title = parser_book_title(data[0])
+    book_url = data[1]
+    book_full_title = parser_book_full_title(data[0])
+    book_cover = parser_book_cover(data[0])
+    book_info1 = parser_book_info1(data[0])
+    book_price = parser_book_price(data[0])
+    book_info2 = parser_book_info2(data[0])
+    book_desc = parser_book_desc(data[0])
+    book_author = parser_book_author(data[0])
+    book_outline = parser_book_outline(data[0])
 
-  # Mapping the parser data to template.
-  result = {
-      'title': book_title,
-      'url': book_url,
-      'full_title': book_full_title,
-      'cover': book_cover,
-      'info1': book_info1,
-      'price': book_price,
-      'info2': book_info2,
-      'desc': book_desc,
-      'author': book_author,
-      'outline': book_outline
-  }
-  return result
+    # Mapping the parser data to template.
+    result = {
+        'title': book_title,
+        'url': book_url,
+        'full_title': book_full_title,
+        'cover': book_cover,
+        'info1': book_info1,
+        'price': book_price,
+        'info2': book_info2,
+        'desc': book_desc,
+        'author': book_author,
+        'outline': book_outline
+    }
+    return result
+  except Exception as e:
+      print(e)
 
 
 if __name__ == "__main__":

@@ -14,21 +14,11 @@ urllib3.disable_warnings()
 logging.captureWarnings(True)
 
 
-def get_data():
+def get_data(book_url):
     try:
-        arg = sys.argv[1]
-
-        if arg.isdigit():
-            # send get request and get reposoe.
-            book_url = str('https://www.tenlong.com.tw/products/' + arg)
-            res = requests.get(book_url)
-            soup = BeautifulSoup(res.text)
-            return soup, book_url
-
-        else:
-            # get web page from local for development.
-            soup = BeautifulSoup(open(arg))
-            return soup
+        res = requests.get(book_url)
+        soup = BeautifulSoup(res.text)
+        return soup, book_url
 
     except Exception as e:
         print(e)
@@ -78,7 +68,7 @@ def parser_book_outline(data):
         return outline
 
 
-def main():
+def to_html(data):
     try:
         # Template with Jinja2
         template = Template('''\
@@ -126,9 +116,20 @@ def main():
 </body>
 </html>
 ''')
+        # Mapping the parser data to template.
+        result = template.render(**data)
 
+        # Write to HTML file.
+        with open('index.html', 'w') as f:
+          f.write(pangu.spacing_text(result))
+    except Exception as e:
+        print(e)
+
+
+def crawl_tenlong(book_url):
+    try:
         # Get data.
-        data = get_data()
+        data = get_data(book_url)
 
         # Parser.
         book_title = parser_book_title(data[0])
@@ -139,23 +140,28 @@ def main():
         book_outline = parser_book_outline(data[0])
 
         # Mapping the parser data to template.
-        result = template.render(
-            title=book_title,
-            url=book_url,
-            info=book_info,
-            desc=book_desc,
-            author=book_author,
-            outline=book_outline
-        )
+        result = {
+            'title': book_title,
+            'url': book_url,
+            'info': book_info,
+            'desc': book_desc,
+            'author': book_author,
+            'outline': book_outline
+        }
 
-        # Write to HTML file.
-        f = open('index.html', 'w')
-        f.write(pangu.spacing_text(result))
-        f.close()
-
+        return result
     except Exception as e:
         print(e)
 
 
 if __name__ == "__main__":
-    main()
+    arg = sys.argv[1]
+
+    if arg.isdigit():
+        # send get request and get reposoe.
+        book_url = str('https://www.tenlong.com.tw/products/' + arg)
+    else:
+        book_url = str(arg)
+
+    data = crawl_tenlong(book_url)
+    to_html(data)
