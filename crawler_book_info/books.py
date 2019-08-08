@@ -14,20 +14,12 @@ urllib3.disable_warnings()
 logging.captureWarnings(True)
 
 
-def get_data():
+def get_data(book_url):
     try:
-        arg = sys.argv[1]
-
-        if arg.isdigit():
-            book_url = str('https://www.books.com.tw/products/' + arg)
-        else:
-            book_url = str(arg)
-
         # send get request and get reposoe.
         res = requests.get(book_url)
         soup = BeautifulSoup(res.text)
         return soup, book_url
-
     except Exception as e:
         print(e)
 
@@ -150,9 +142,8 @@ def parser_book_outline(data):
         return outline
 
 
-def main():
+def to_html(data):
     try:
-
         # Template with Jinja2
         template = Template('''\
 <!DOCTYPE html>
@@ -207,43 +198,55 @@ def main():
 </html>
 ''')
 
-        # Get data.
-        data = get_data()
-
-        # Parser.
-        book_title = parser_book_title(data[0])
-        book_url = data[1]
-        book_full_title = parser_book_full_title(data[0])
-        book_cover = parser_book_cover(data[0])
-        book_info1 = parser_book_info1(data[0])
-        book_price = parser_book_price(data[0])
-        book_info2 = parser_book_info2(data[0])
-        book_desc = parser_book_desc(data[0])
-        book_author = parser_book_author(data[0])
-        book_outline = parser_book_outline(data[0])
-
         # Mapping the parser data to template.
-        result = template.render(
-            title=book_title,
-            url=book_url,
-            full_title=book_full_title,
-            cover=book_cover,
-            info1=book_info1,
-            price=book_price,
-            info2=book_info2,
-            desc=book_desc,
-            author=book_author,
-            outline=book_outline
-        )
+        result = template.render(**data)
 
         # Write to HTML file.
-        f = open('index.html', 'w')
-        f.write(pangu.spacing_text(result))
-        f.close()
-
+        with open('index.html', 'w') as f:
+          f.write(pangu.spacing_text(result))
     except Exception as e:
         print(e)
 
 
+def crawl_books_com_tw(book_url):
+  # Get data.
+  data = get_data(book_url)
+
+  # Parser.
+  book_title = parser_book_title(data[0])
+  book_url = data[1]
+  book_full_title = parser_book_full_title(data[0])
+  book_cover = parser_book_cover(data[0])
+  book_info1 = parser_book_info1(data[0])
+  book_price = parser_book_price(data[0])
+  book_info2 = parser_book_info2(data[0])
+  book_desc = parser_book_desc(data[0])
+  book_author = parser_book_author(data[0])
+  book_outline = parser_book_outline(data[0])
+
+  # Mapping the parser data to template.
+  result = {
+      'title': book_title,
+      'url': book_url,
+      'full_title': book_full_title,
+      'cover': book_cover,
+      'info1': book_info1,
+      'price': book_price,
+      'info2': book_info2,
+      'desc': book_desc,
+      'author': book_author,
+      'outline': book_outline
+  }
+  return result
+
+
 if __name__ == "__main__":
-    main()
+    arg = sys.argv[1]
+
+    if arg.isdigit():
+        book_url = str('https://www.books.com.tw/products/' + arg)
+    else:
+        book_url = str(arg)
+
+    data = crawl_books_com_tw(book_url)
+    to_html(data)

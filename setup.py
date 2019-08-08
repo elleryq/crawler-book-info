@@ -8,7 +8,7 @@ crawler-book-info
 from setuptools import find_packages, setup
 
 
-install_requires = ["beautifulsoup4", "requests", "jinja2"]
+install_requires = ["beautifulsoup4", "requests", "jinja2", "pangu"]
 tests_requires = ["pytest", "flake8"]
 
 setup(
