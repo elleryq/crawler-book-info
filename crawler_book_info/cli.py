@@ -22,7 +22,7 @@ def main():
     for netloc, crawl, to_html in netloc_mapping:
       if netloc in o.netloc:
         data = crawl(url)
-        to_html(data)
+        to_html(data, open("output.html", "w"))
         break
 
 

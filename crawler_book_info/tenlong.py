@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-import importlib_resources as _resources
-from jinja2 import Template, FileSystemLoader, Environment
 import logging
 import requests
 import sys
 import urllib3
 import pangu
+
+from crawler_book_info.common import to_html as common_to_html
+
 
 # disable ssl warn message.
 urllib3.disable_warnings()
@@ -69,23 +70,8 @@ def parser_book_outline(data):
         return outline
 
 
-def to_html(data):
-    try:
-        # Template with Jinja2
-        with _resources.path("crawler_book_info", "templates") as _path:
-            template_path = str(_path)
-            loader = FileSystemLoader(searchpath=template_path)
-            env = Environment(loader=loader)
-            template = env.get_template("tenlong.tmpl")
-
-            # Mapping the parser data to template.
-            result = template.render(**data)
-
-            # Write to HTML file.
-            with open("index.html", "w") as f:
-                f.write(pangu.spacing_text(result))
-    except Exception as e:
-        print(e)
+def to_html(data, fp):
+    common_to_html(data, "tenlong.tmpl", fp)
 
 
 def crawl_tenlong(book_url):
