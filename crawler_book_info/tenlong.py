@@ -6,7 +6,6 @@ import logging
 import requests
 import sys
 import urllib3
-import pangu
 
 from crawler_book_info.common import to_html as common_to_html
 
