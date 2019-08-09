@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 crawler-book-info
 ==========
@@ -6,6 +8,7 @@ License: MIT, see LICENSE for more details.
 import argparse
 from urllib.parse import urlparse
 from crawler_book_info import tenlong, books
+from crawler_book_info.generic import find_crawler
 
 
 def main():
@@ -20,19 +23,11 @@ def main():
         'url', nargs='?')
     args = parser.parse_args()
 
-    netloc_mapping = (
-        ('tenlong.com.tw', tenlong.crawl_tenlong, tenlong.to_html),
-        ('books.com.tw', books.crawl_books_com_tw, books.to_html),
-    )
-
     url = args.url
-    o = urlparse(url)
-    for netloc, crawl, to_html in netloc_mapping:
-        if netloc in o.netloc:
-            data = crawl(url)
-            to_html(data, args.output)
-            print("'{}' was crawled to '{}'".format(url, args.output.name))
-            break
+    crawl, to_html = find_crawler(url)
+    data = crawl(url)
+    to_html(data, args.output)
+    print("'{}' was crawled to '{}'".format(url, args.output.name))
 
 
 if __name__ == "__main__":
