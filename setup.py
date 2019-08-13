@@ -13,7 +13,7 @@ tests_requires = ["pytest", "flake8"]
 
 setup(
     name="crawler-book-info",
-    version="0.1.0",
+    version="2.4.0",
     author="Yan-ren Tsai",
     author_email="elleryq@gmail.com",
     url="https://github.com/elleryq/crawler-book-info",
