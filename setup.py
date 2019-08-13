@@ -14,9 +14,9 @@ tests_requires = ["pytest", "flake8"]
 setup(
     name="crawler-book-info",
     version="2.4.0",
-    author="Yan-ren Tsai",
-    author_email="elleryq@gmail.com",
-    url="https://github.com/elleryq/crawler-book-info",
+    author="Chu-Siang Lai, Yan-ren Tsai",
+    author_email="chusiang@drx.tw, elleryq@gmail.com",
+    url="https://github.com/chusiang/crawler-book-info",
     description="A tool for crawling book informationi from bookstore site.",
     long_description=__doc__,
     packages=find_packages(exclude=["tests"]),
