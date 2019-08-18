@@ -9,7 +9,7 @@
   <p>
     Buy:
     <ul>
-      <li> <a href="{{ url }}" target="_blank">博客來</a> </li>
+      <li> <a href="{{ url }}" target="_blank">{{site_name}}</a> </li>
     </ul>
   </p>
   <hr>
@@ -18,9 +18,9 @@
     <img src="{{ cover }}"/>
   </p>
 
-  {{ info1 }}
+  {{ info[0] }}
   {{ price }}
-  {{ info2 }}
+  {{ info[1] }}
 
   <h2>商品描述</h2>
   {{ desc }}

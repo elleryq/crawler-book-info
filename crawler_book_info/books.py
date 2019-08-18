@@ -166,13 +166,13 @@ def crawl_books_com_tw(book_url):
 
         # Mapping the parser data to template.
         result = {
+            "site_name": "博客來",
             "title": book_title,
             "url": book_url,
             "full_title": book_full_title,
             "cover": book_cover,
-            "info1": book_info1,
+            "info": [book_info1, book_info2],
             "price": book_price,
-            "info2": book_info2,
             "desc": book_desc,
             "author": book_author,
             "outline": book_outline,

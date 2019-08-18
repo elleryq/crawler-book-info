@@ -88,9 +88,10 @@ def crawl_tenlong(book_url):
 
         # Mapping the parser data to template.
         result = {
+            "site_name": "天瓏書局",
             "title": book_title,
             "url": book_url,
-            "info": book_info,
+            "info": [book_info],
             "desc": book_desc,
             "author": book_author,
             "outline": book_outline,
