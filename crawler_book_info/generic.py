@@ -3,7 +3,6 @@ crawler-book-info
 ==========
 License: MIT, see LICENSE for more details.
 """
-import argparse
 from urllib.parse import urlparse
 from crawler_book_info import tenlong, books
 

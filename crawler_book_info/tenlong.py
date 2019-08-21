@@ -8,6 +8,7 @@ import sys
 import urllib3
 
 from crawler_book_info.common import to_html as common_to_html
+from crawler_book_info.common import get_argument_parser
 
 
 # disable ssl warn message.
@@ -102,14 +103,22 @@ def crawl_tenlong(book_url):
         print(e)
 
 
-if __name__ == "__main__":
-    arg = sys.argv[1]
+def tenlong_main():
+    parser = get_argument_parser()
+    args = parser.parse_args()
+
+    arg = args.url_or_id
 
     if arg.isdigit():
-        # send get request and get reposoe.
+        # arg is ISBN.
         book_url = str("https://www.tenlong.com.tw/products/" + arg)
     else:
         book_url = str(arg)
 
     data = crawl_tenlong(book_url)
-    to_html(data)
+    to_html(data, args.output)
+    print("'{}' was crawled to '{}'".format(book_url, args.output.name))
+
+
+if __name__ == "__main__":
+    tenlong_main()

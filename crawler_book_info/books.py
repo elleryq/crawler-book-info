@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
+import argparse
 import logging
 import requests
 import sys
 import urllib3
 
 from crawler_book_info.common import to_html as common_to_html
+from crawler_book_info.common import get_argument_parser
 
 
 # disable ssl warn message.
@@ -182,13 +184,21 @@ def crawl_books_com_tw(book_url):
         print(e)
 
 
-if __name__ == "__main__":
-    arg = sys.argv[1]
+def books_main():
+    parser = get_argument_parser()
+    args = parser.parse_args()
+
+    arg = args.url_or_id
 
     if arg.isdigit():
         book_url = str("https://www.books.com.tw/products/" + arg)
     else:
-        book_url = str(arg)
+        book_url = arg
 
     data = crawl_books_com_tw(book_url)
-    to_html(data)
+    to_html(data, args.output)
+    print("'{}' was crawled to '{}'".format(book_url, args.output.name))
+
+
+if __name__ == "__main__":
+    books_main()

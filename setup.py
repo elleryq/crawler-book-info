@@ -28,7 +28,13 @@ setup(
     },
     tests_require=tests_requires,
     include_package_data=True,
-    entry_points={"console_scripts": ["crawler-book-info = crawler_book_info:main"]},
+    entry_points={
+        "console_scripts": [
+            "crawler-book-info = crawler_book_info:main",
+            "crawler-book-info.books = crawler_book_info.books:books_main",
+            "crawler-book-info.tenlong = crawler_book_info.tenlong:tenlong_main",
+        ]
+    },
     classifiers=[
         "Intended Audience :: Other Audience",
         "Operating System :: OS Independent",
