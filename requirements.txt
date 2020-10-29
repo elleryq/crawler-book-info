@@ -14,3 +14,4 @@ soupsieve==1.9.1
 urllib3==1.24.3
 importlib_resources==1.0.2
 bump2version==0.5.10
+psycopg2==2.8.6
